@@ -1,1 +1,464 @@
-Hallo World！！！
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛尔号 - 勇敢赛尔 探索宇宙</title>
+<style>
+  :root{
+    --deep:#071a4a;
+    --deep2:#0d2a6e;
+    --blue:#1677ff;
+    --cyan:#22d3ee;
+    --yellow:#ffd54a;
+    --orange:#ff8a3d;
+    --ink:#0b1b3a;
+    --muted:#6b7a99;
+    --card:#ffffff;
+    --line:#e6ecf7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;
+    background:#f5f8ff;
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  a{text-decoration:none;color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- 顶部工具条 ---------- */
+  .topbar{
+    background:rgba(4,14,44,.85);
+    color:#c9d6f0;
+    font-size:12px;
+    height:32px;
+    line-height:32px;
+  }
+  .topbar .wrap{display:flex;justify-content:space-between;}
+  .topbar b{color:var(--yellow);}
+
+  /* ---------- 导航 ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(90deg,#06143c,#0c2b74 60%,#0a2260);
+    box-shadow:0 4px 20px rgba(0,0,0,.25);
+  }
+  .nav-inner{height:70px;display:flex;align-items:center;gap:30px;}
+  .logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .logo .orb{
+    width:42px;height:42px;border-radius:50%;
+    background:radial-gradient(circle at 32% 30%,#7fe9ff,#1677ff 55%,#0b2a7a);
+    box-shadow:0 0 18px rgba(34,211,238,.6),inset -6px -6px 12px rgba(0,0,0,.35);
+    position:relative;
+  }
+  .logo .orb::after{
+    content:"";position:absolute;left:-6px;right:-6px;top:18px;height:9px;
+    border:2px solid #ffd54a;border-radius:50%;transform:rotate(-20deg);
+  }
+  .logo span{
+    font-size:26px;font-weight:900;letter-spacing:2px;
+    background:linear-gradient(180deg,#fff,#ffd54a);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 2px 8px rgba(255,213,74,.25);
+  }
+  .menu{display:flex;gap:26px;margin-left:20px;}
+  .menu a{color:#dbe6ff;font-size:15px;font-weight:600;padding:24px 0;position:relative;transition:color .2s;}
+  .menu a:hover,.menu a.active{color:#fff;}
+  .menu a.active::after,.menu a:hover::after{
+    content:"";position:absolute;left:0;right:0;bottom:14px;height:3px;
+    background:var(--yellow);border-radius:3px;
+  }
+  .nav-btns{margin-left:auto;display:flex;gap:10px;}
+  .btn{
+    border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;
+    padding:10px 20px;border-radius:24px;transition:transform .15s,box-shadow .15s;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-ghost{background:transparent;color:#dbe6ff;border:1px solid #3a5aa5;}
+  .btn-ghost:hover{border-color:#9fc0ff;color:#fff;}
+  .btn-gold{background:linear-gradient(180deg,#ffe27a,#ffb52e);color:#7a3b00;box-shadow:0 4px 14px rgba(255,181,46,.4);}
+  .btn-gold:hover{box-shadow:0 6px 18px rgba(255,181,46,.6);}
+
+  /* ---------- 主视觉 ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(ellipse at 78% 40%,rgba(34,211,238,.28),transparent 55%),
+      radial-gradient(ellipse at 20% 80%,rgba(105,90,255,.35),transparent 55%),
+      linear-gradient(135deg,#061435 0%,#0b2a70 55%,#0a1d55 100%);
+  }
+  .stars{position:absolute;inset:0;pointer-events:none;}
+  .stars i{
+    position:absolute;background:#fff;border-radius:50%;
+    animation:twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+  .hero-inner{position:relative;z-index:2;min-height:470px;display:flex;align-items:center;}
+  .hero-copy{flex:1;padding:60px 0;color:#fff;max-width:600px;}
+  .tag{
+    display:inline-block;background:rgba(255,213,74,.15);border:1px solid rgba(255,213,74,.5);
+    color:var(--yellow);font-size:13px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:18px;
+  }
+  .hero h1{font-size:52px;line-height:1.2;letter-spacing:2px;margin-bottom:16px;}
+  .hero h1 em{font-style:normal;color:var(--yellow);}
+  .hero p.sub{font-size:17px;color:#bcd0f5;line-height:1.8;margin-bottom:28px;}
+  .hero-actions{display:flex;gap:14px;}
+  .btn-lg{padding:14px 34px;font-size:16px;border-radius:30px;}
+  .btn-cyan{background:linear-gradient(180deg,#5ee7ff,#12a4d8);color:#043a52;box-shadow:0 6px 20px rgba(18,164,216,.45);}
+  .btn-cyan:hover{box-shadow:0 8px 26px rgba(18,164,216,.7);}
+  .btn-outline{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.45);}
+  .btn-outline:hover{background:rgba(255,255,255,.18);}
+
+  /* 右侧星球 + 精灵 */
+  .hero-art{flex:1;position:relative;height:470px;}
+  .planet{
+    position:absolute;left:50%;top:50%;width:280px;height:280px;margin:-140px 0 0 -140px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 28%,#8ef0ff 0%,#2aa7e6 28%,#1657c4 62%,#0a2770 100%);
+    box-shadow:0 0 60px rgba(34,211,238,.45),inset -20px -20px 50px rgba(0,0,0,.5);
+    animation:float 6s ease-in-out infinite;
+  }
+  .planet::before{
+    content:"";position:absolute;inset:22px;border-radius:50%;
+    background:
+      radial-gradient(ellipse at 30% 60%,rgba(255,255,255,.18) 0 12%,transparent 13%),
+      radial-gradient(ellipse at 65% 35%,rgba(0,0,0,.15) 0 16%,transparent 17%),
+      radial-gradient(ellipse at 55% 75%,rgba(255,255,255,.12) 0 10%,transparent 11%);
+  }
+  .ring{
+    position:absolute;left:50%;top:50%;width:400px;height:110px;margin:-55px 0 0 -200px;
+    border:12px solid rgba(255,213,74,.75);border-radius:50%;transform:rotate(-22deg);
+    box-shadow:0 0 22px rgba(255,213,74,.35);
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .spirit{
+    position:absolute;font-size:46px;line-height:1;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));
+    animation:bob 4s ease-in-out infinite;
+  }
+  .spirit.s1{left:2%;top:18%;animation-delay:0s;}
+  .spirit.s2{right:2%;top:22%;animation-delay:.7s;font-size:40px;}
+  .spirit.s3{left:12%;bottom:14%;animation-delay:1.4s;font-size:38px;}
+  .spirit.s4{right:10%;bottom:10%;animation-delay:2.1s;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-16px) rotate(6deg)}}
+
+  /* ---------- 快捷入口 ---------- */
+  .quick{background:#fff;padding:38px 0 8px;}
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .qcard{
+    background:linear-gradient(180deg,#fff,#f2f7ff);
+    border:1px solid var(--line);border-radius:16px;padding:22px 18px;
+    display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;
+  }
+  .qcard:hover{transform:translateY(-5px);box-shadow:0 12px 26px rgba(22,119,255,.14);border-color:#bcd6ff;}
+  .qicon{
+    width:52px;height:52px;border-radius:14px;flex-shrink:0;
+    display:grid;place-items:center;font-size:26px;color:#fff;
+  }
+  .q1{background:linear-gradient(135deg,#42a5ff,#1565c0);}
+  .q2{background:linear-gradient(135deg,#ff8a65,#e53935);}
+  .q3{background:linear-gradient(135deg,#66d6a0,#0f9d58);}
+  .q4{background:linear-gradient(135deg,#ba68c8,#7b1fa2);}
+  .qcard h3{font-size:16px;margin-bottom:4px;}
+  .qcard p{font-size:12px;color:var(--muted);}
+
+  /* ---------- 通用区块标题 ---------- */
+  section.block{padding:48px 0;}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;}
+  .head h2{font-size:28px;position:relative;padding-left:16px;}
+  .head h2::before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:5px;border-radius:3px;background:linear-gradient(180deg,var(--cyan),var(--blue));}
+  .head h2 small{font-size:14px;color:var(--muted);font-weight:400;margin-left:10px;}
+  .head .more{font-size:14px;color:var(--blue);font-weight:600;}
+  .head .more:hover{text-decoration:underline;}
+
+  /* ---------- 新闻 ---------- */
+  .news{background:#f5f8ff;}
+  .news-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;}
+  .feature{
+    position:relative;min-height:280px;border-radius:18px;overflow:hidden;color:#fff;
+    background:linear-gradient(135deg,#0a2a72,#1677ff);padding:30px;
+    display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;
+  }
+  .feature .glow{position:absolute;right:-30px;top:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.6),transparent 70%);}
+  .feature .badge{position:absolute;top:20px;left:20px;background:var(--orange);font-size:12px;font-weight:700;padding:5px 12px;border-radius:14px;}
+  .feature h3{font-size:26px;line-height:1.4;margin-bottom:10px;position:relative;}
+  .feature p{font-size:14px;color:#cfe0ff;position:relative;}
+  .feature:hover h3{color:var(--yellow);}
+  .newspanel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:8px 22px 18px;}
+  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);}
+  .tabs button{
+    border:0;background:transparent;font-family:inherit;font-size:15px;font-weight:700;
+    color:var(--muted);padding:14px 0;cursor:pointer;position:relative;
+  }
+  .tabs button.on{color:var(--blue);}
+  .tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--blue);border-radius:3px;}
+  .newslist{list-style:none;margin-top:8px;}
+  .newslist li{
+    display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);
+    font-size:14px;cursor:pointer;
+  }
+  .newslist li:last-child{border-bottom:0;}
+  .newslist li:hover a{color:var(--blue);}
+  .newslist .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+  .newslist a{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .newslist time{color:var(--muted);font-size:12px;flex-shrink:0;}
+  .newslist .new{background:#ff4757;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;flex-shrink:0;}
+
+  /* ---------- 精灵图鉴 ---------- */
+  .spirits{background:#fff;}
+  .spirit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .scard{
+    border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;
+    transition:.2s;cursor:pointer;
+  }
+  .scard:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(20,60,150,.16);}
+  .scover{height:150px;display:grid;place-items:center;font-size:70px;position:relative;
+    filter:drop-shadow(0 8px 10px rgba(0,0,0,.12));}
+  .c1{background:radial-gradient(circle at 50% 40%,#fff3cd,#ffd54a);}
+  .c2{background:radial-gradient(circle at 50% 40%,#d9f6ff,#6ec6ff);}
+  .c3{background:radial-gradient(circle at 50% 40%,#ffe0e0,#ff8a80);}
+  .c4{background:radial-gradient(circle at 50% 40%,#e5dbff,#b388ff);}
+  .type{
+    position:absolute;left:12px;top:12px;background:rgba(255,255,255,.85);color:#334;
+    font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;
+  }
+  .sbody{padding:16px;}
+  .sbody h3{font-size:17px;margin-bottom:6px;}
+  .sbody .desc{font-size:12px;color:var(--muted);line-height:1.6;height:38px;overflow:hidden;}
+  .stars{margin-top:10px;color:#ffb300;font-size:14px;letter-spacing:2px;}
+  .stars span{color:#d6ddea;}
+
+  /* ---------- 游戏特色 ---------- */
+  .feature-sec{background:linear-gradient(180deg,#f5f8ff,#eaf1ff);}
+  .f-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .fitem{text-align:center;padding:26px 16px;background:#fff;border-radius:18px;border:1px solid var(--line);transition:.2s;}
+  .fitem:hover{transform:translateY(-5px);box-shadow:0 12px 26px rgba(22,119,255,.12);}
+  .ficon{width:66px;height:66px;margin:0 auto 16px;border-radius:20px;display:grid;place-items:center;font-size:32px;color:#fff;}
+  .fitem h3{margin-bottom:8px;font-size:17px;}
+  .fitem p{font-size:13px;color:var(--muted);line-height:1.7;}
+
+  /* ---------- 页脚 ---------- */
+  footer{background:#071535;color:#9fb0d4;padding:38px 0 22px;font-size:13px;}
+  .f-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+  .f-brand b{color:#fff;font-size:20px;letter-spacing:2px;display:block;margin-bottom:8px;}
+  .f-links{display:flex;gap:44px;}
+  .f-links div h4{color:#fff;font-size:14px;margin-bottom:12px;}
+  .f-links a{display:block;margin-bottom:7px;}
+  .f-links a:hover{color:var(--yellow);}
+  .f-bottom{border-top:1px solid #1c2c55;margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:#7688b0;line-height:1.8;}
+  .disclaimer{color:#ffb74d;}
+
+  @media(max-width:900px){
+    .menu,.topbar{display:none;}
+    .hero-inner{flex-direction:column;text-align:center;}
+    .hero h1{font-size:38px;}
+    .hero-art{width:100%;}
+    .quick-grid,.spirit-grid,.f-grid{grid-template-columns:repeat(2,1fr);}
+    .news-grid{grid-template-columns:1fr;}
+    .f-links{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部工具条 -->
+<div class="topbar">
+  <div class="wrap">
+    <span>欢迎来到赛尔号！<b>勇敢赛尔，探索宇宙</b></span>
+    <span>客服中心 | 家长监护 | 防沉迷系统</span>
+  </div>
+</div>
+
+<!-- 导航 -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="logo">
+      <div class="orb"></div>
+      <span>赛尔号</span>
+    </div>
+    <nav class="menu">
+      <a href="#" class="active">首页</a>
+      <a href="#spirit">精灵图鉴</a>
+      <a href="#news">新闻中心</a>
+      <a href="#feature">游戏特色</a>
+      <a href="#">玩家社区</a>
+    </nav>
+    <div class="nav-btns">
+      <button class="btn btn-ghost">登录</button>
+      <button class="btn btn-gold">注册账号</button>
+    </div>
+  </div>
+</header>
+
+<!-- 主视觉 -->
+<section class="hero">
+  <div class="stars" id="stars"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <span class="tag">✦ 全新资料片「星海远征」震撼开启</span>
+      <h1>勇敢赛尔<br><em>探索宇宙</em></h1>
+      <p class="sub">集结你的精灵战队，穿越浩瀚星海，揭开宇宙深处的神秘面纱。<br>收集、培养、对战，属于你的赛尔传奇现在开始！</p>
+      <div class="hero-actions">
+        <button class="btn btn-lg btn-cyan">▶ 开始游戏</button>
+        <button class="btn btn-lg btn-outline">查看精灵图鉴</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="ring"></div>
+      <div class="planet"></div>
+      <div class="spirit s1">🐲</div>
+      <div class="spirit s2">🦊</div>
+      <div class="spirit s3">🐼</div>
+      <div class="spirit s4">🧊</div>
+    </div>
+  </div>
+</section>
+
+<!-- 快捷入口 -->
+<section class="quick">
+  <div class="wrap quick-grid">
+    <div class="qcard"><div class="qicon q1">⚔️</div><div><h3>对战大厅</h3><p>与其他赛尔一决高下</p></div></div>
+    <div class="qcard"><div class="qicon q2">🎁</div><div><h3>每日任务</h3><p>登录领奖，惊喜不断</p></div></div>
+    <div class="qcard"><div class="qicon q3">🗺️</div><div><h3>星图探险</h3><p>探索未知星球秘境</p></div></div>
+    <div class="qcard"><div class="qicon q4">🏪</div><div><h3>精灵商城</h3><p>稀有道具限时上架</p></div></div>
+  </div>
+</section>
+
+<!-- 新闻中心 -->
+<section class="block news" id="news">
+  <div class="wrap">
+    <div class="head">
+      <h2>新闻中心 <small>NEWS CENTER</small></h2>
+      <a href="#" class="more">更多资讯 →</a>
+    </div>
+    <div class="news-grid">
+      <div class="feature">
+        <div class="glow"></div>
+        <span class="badge">热点</span>
+        <h3>「星海远征」资料片正式上线<br>全新精灵等你来战！</h3>
+        <p>探索全新星域，解锁传说级精灵，更有海量福利活动同期开启。</p>
+      </div>
+      <div class="newspanel">
+        <div class="tabs">
+          <button class="on" data-tab="notice">最新公告</button>
+          <button data-tab="event">游戏活动</button>
+        </div>
+        <ul class="newslist" id="notice">
+          <li><span class="dot"></span><a href="#">关于游戏服务器周末维护的公告</a><span class="new">NEW</span><time>11-16</time></li>
+          <li><span class="dot"></span><a href="#">精灵图鉴新增：远古系谱系大盘点</a><time>11-15</time></li>
+          <li><span class="dot"></span><a href="#">账号安全提醒：谨防虚假中奖信息</a><time>11-14</time></li>
+          <li><span class="dot"></span><a href="#">叛逆会员专属福利领取说明</a><time>11-12</time></li>
+          <li><span class="dot"></span><a href="#">客户端版本更新至 V12.8 正式版</a><time>11-10</time></li>
+        </ul>
+        <ul class="newslist" id="event" style="display:none">
+          <li><span class="dot"></span><a href="#">双倍经验狂欢周，全服开启！</a><span class="new">HOT</span><time>11-16</time></li>
+          <li><span class="dot"></span><a href="#">限时抽卡：传说精灵「炽焰战神」</a><time>11-15</time></li>
+          <li><span class="dot"></span><a href="#">签到七天送稀有精灵蛋</a><time>11-13</time></li>
+          <li><span class="dot"></span><a href="#">战队争霸赛报名火热进行中</a><time>11-11</time></li>
+          <li><span class="dot"></span><a href="#">节日礼包限时折扣发售</a><time>11-09</time></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 精灵图鉴 -->
+<section class="block spirits" id="spirit">
+  <div class="wrap">
+    <div class="head">
+      <h2>热门精灵 <small>SPIRIT GUIDE</small></h2>
+      <a href="#" class="more">查看全部 →</a>
+    </div>
+    <div class="spirit-grid">
+      <div class="scard">
+        <div class="scover c1"><span class="type">🔥 火系</span>🐲</div>
+        <div class="sbody"><h3>炽焰战神</h3><div class="desc">掌控火焰之力的远古战士，攻击力极强。</div><div class="stars">★★★★★</div></div>
+      </div>
+      <div class="scard">
+        <div class="scover c2"><span class="type">💧 水系</span>🐳</div>
+        <div class="sbody"><h3>深海守望者</h3><div class="desc">来自深海的守护精灵，拥有强大的防御。</div><div class="stars">★★★★<span>★</span></div></div>
+      </div>
+      <div class="scard">
+        <div class="scover c3"><span class="type">🌿 草系</span>🦊</div>
+        <div class="sbody"><h3>森之灵狐</h3><div class="desc">敏捷的森林精灵，擅长速度与控制。</div><div class="stars">★★★★<span>★</span></div></div>
+      </div>
+      <div class="scard">
+        <div class="scover c4"><span class="type">⚡ 电系</span>🦅</div>
+        <div class="sbody"><h3>雷鸣天鹰</h3><div class="desc">以雷电为翼的天空霸主，速度惊人。</div><div class="stars">★★★★★</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 游戏特色 -->
+<section class="block feature-sec" id="feature">
+  <div class="wrap">
+    <div class="head">
+      <h2>游戏特色 <small>FEATURES</small></h2>
+    </div>
+    <div class="f-grid">
+      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#42a5ff,#1565c0)">🚀</div><h3>星海探索</h3><p>驾驶飞船穿越星河，发现数百颗神秘星球。</p></div>
+      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#ff8a65,#e53935)">🐾</div><h3>精灵收集</h3><p>上千种精灵任你捕捉，打造专属梦幻战队。</p></div>
+      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#66d6a0,#0f9d58)">⚔️</div><h3>策略对战</h3><p>属性相克、技能搭配，用智慧赢取每场胜利。</p></div>
+      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#ba68c8,#7b1fa2)">🏆</div><h3>成长进阶</h3><p>进化、融合、超能训练，见证精灵的蜕变。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="f-brand">
+        <b>赛尔号</b>
+        <p>勇敢赛尔，探索宇宙<br>一起开启星际冒险之旅</p>
+      </div>
+      <div class="f-links">
+        <div><h4>关于游戏</h4><a href="#">游戏介绍</a><a href="#">新手指南</a><a href="#">常见问题</a></div>
+        <div><h4>玩家支持</h4><a href="#">客服中心</a><a href="#">账号找回</a><a href="#">防沉迷系统</a></div>
+        <div><h4>关注我们</h4><a href="#">官方微博</a><a href="#">微信公众号</a><a href="#">玩家社区</a></div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <p>赛尔号 · 一个充满想象力的星际冒险世界</p>
+      <p class="disclaimer">※ 本页面为个人练习用的仿写 Demo，非官方网站，所有素材仅作学习展示使用。</p>
+      <p>© 2026 Seer Fan-made Demo. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 生成星空
+  (function(){
+    var box=document.getElementById('stars'),html='';
+    for(var i=0;i<90;i++){
+      var x=Math.random()*100,y=Math.random()*100,
+          s=Math.random()*2+1,d=(Math.random()*3).toFixed(2);
+      html+='<i style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;animation-delay:'+d+'s"></i>';
+    }
+    box.innerHTML=html;
+  })();
+
+  // 新闻 Tab 切换
+  document.querySelectorAll('.tabs button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tabs button').forEach(function(b){b.classList.remove('on');});
+      document.querySelectorAll('.newslist').forEach(function(l){l.style.display='none';});
+      btn.classList.add('on');
+      document.getElementById(btn.dataset.tab).style.display='block';
+    });
+  });
+
+  // 导航高亮
+  document.querySelectorAll('.menu a').forEach(function(a){
+    a.addEventListener('click',function(){
+      document.querySelectorAll('.menu a').forEach(function(x){x.classList.remove('active');});
+      a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
