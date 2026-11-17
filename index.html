@@ -3,462 +3,703 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>赛尔号 - 勇敢赛尔 探索宇宙</title>
+<title>桌面软件使用与故障处理基本手册</title>
 <style>
   :root{
-    --deep:#071a4a;
-    --deep2:#0d2a6e;
-    --blue:#1677ff;
-    --cyan:#22d3ee;
-    --yellow:#ffd54a;
-    --orange:#ff8a3d;
-    --ink:#0b1b3a;
-    --muted:#6b7a99;
-    --card:#ffffff;
-    --line:#e6ecf7;
+    --bg:#f5f7fa;
+    --panel:#ffffff;
+    --ink:#1f2733;
+    --ink-soft:#55606f;
+    --line:#e3e8ef;
+    --accent:#2f6df6;
+    --accent-soft:#eaf1ff;
+    --ok:#1a9d5a;
+    --ok-soft:#e7f7ee;
+    --warn:#c97a0e;
+    --warn-soft:#fff4e2;
+    --danger:#d23b3b;
+    --danger-soft:#fdeaea;
+    --code-bg:#0f172a;
+    --shadow:0 1px 3px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.05);
+    --sidebar-w:290px;
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   body{
-    font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;
-    background:#f5f8ff;
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
     color:var(--ink);
-    overflow-x:hidden;
+    background:var(--bg);
+    line-height:1.75;
+    font-size:15px;
   }
-  a{text-decoration:none;color:inherit;}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);text-decoration:none}
 
-  /* ---------- 顶部工具条 ---------- */
+  /* ---------- 顶部条 ---------- */
   .topbar{
-    background:rgba(4,14,44,.85);
-    color:#c9d6f0;
-    font-size:12px;
-    height:32px;
-    line-height:32px;
+    position:fixed;top:0;left:0;right:0;height:56px;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:14px;
+    padding:0 22px;z-index:50;
   }
-  .topbar .wrap{display:flex;justify-content:space-between;}
-  .topbar b{color:var(--yellow);}
+  .menu-btn{
+    display:none;width:38px;height:38px;border:1px solid var(--line);
+    background:#fff;border-radius:9px;cursor:pointer;font-size:19px;color:var(--ink);
+  }
+  .brand{font-weight:700;font-size:16px;letter-spacing:.2px}
+  .brand span{color:var(--accent)}
+  .topbar .spacer{flex:1}
+  .topbar .ver{font-size:12px;color:var(--ink-soft);border:1px solid var(--line);padding:3px 10px;border-radius:20px}
 
-  /* ---------- 导航 ---------- */
-  header.nav{
-    position:sticky;top:0;z-index:50;
-    background:linear-gradient(90deg,#06143c,#0c2b74 60%,#0a2260);
-    box-shadow:0 4px 20px rgba(0,0,0,.25);
+  /* ---------- 侧栏 ---------- */
+  .sidebar{
+    position:fixed;top:56px;left:0;bottom:0;width:var(--sidebar-w);
+    background:var(--panel);border-right:1px solid var(--line);
+    padding:18px 14px 40px;overflow-y:auto;z-index:40;
+    transition:transform .25s ease;
   }
-  .nav-inner{height:70px;display:flex;align-items:center;gap:30px;}
-  .logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-  .logo .orb{
-    width:42px;height:42px;border-radius:50%;
-    background:radial-gradient(circle at 32% 30%,#7fe9ff,#1677ff 55%,#0b2a7a);
-    box-shadow:0 0 18px rgba(34,211,238,.6),inset -6px -6px 12px rgba(0,0,0,.35);
-    position:relative;
+  .search-wrap{position:relative;margin-bottom:14px}
+  .search-wrap input{
+    width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);
+    border-radius:9px;font-size:13px;outline:none;background:#fbfcfe;color:var(--ink);
   }
-  .logo .orb::after{
-    content:"";position:absolute;left:-6px;right:-6px;top:18px;height:9px;
-    border:2px solid #ffd54a;border-radius:50%;transform:rotate(-20deg);
+  .search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .search-wrap .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;color:#9aa5b4}
+  .toc-title{font-size:11px;font-weight:700;letter-spacing:1.4px;color:#98a3b3;padding:4px 10px 8px}
+  .toc a{
+    display:block;padding:6px 10px;border-radius:8px;color:var(--ink-soft);
+    font-size:13.5px;line-height:1.45;border-left:2px solid transparent;
   }
-  .logo span{
-    font-size:26px;font-weight:900;letter-spacing:2px;
-    background:linear-gradient(180deg,#fff,#ffd54a);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    text-shadow:0 2px 8px rgba(255,213,74,.25);
-  }
-  .menu{display:flex;gap:26px;margin-left:20px;}
-  .menu a{color:#dbe6ff;font-size:15px;font-weight:600;padding:24px 0;position:relative;transition:color .2s;}
-  .menu a:hover,.menu a.active{color:#fff;}
-  .menu a.active::after,.menu a:hover::after{
-    content:"";position:absolute;left:0;right:0;bottom:14px;height:3px;
-    background:var(--yellow);border-radius:3px;
-  }
-  .nav-btns{margin-left:auto;display:flex;gap:10px;}
-  .btn{
-    border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;
-    padding:10px 20px;border-radius:24px;transition:transform .15s,box-shadow .15s;
-  }
-  .btn:active{transform:translateY(1px);}
-  .btn-ghost{background:transparent;color:#dbe6ff;border:1px solid #3a5aa5;}
-  .btn-ghost:hover{border-color:#9fc0ff;color:#fff;}
-  .btn-gold{background:linear-gradient(180deg,#ffe27a,#ffb52e);color:#7a3b00;box-shadow:0 4px 14px rgba(255,181,46,.4);}
-  .btn-gold:hover{box-shadow:0 6px 18px rgba(255,181,46,.6);}
+  .toc a.lv2{padding-left:24px;font-size:12.8px;color:#6b7686}
+  .toc a:hover{background:var(--accent-soft);color:var(--accent)}
+  .toc a.active{background:var(--accent-soft);color:var(--accent);font-weight:600;border-left-color:var(--accent)}
+  .toc a.hide{display:none}
+  .toc .grp{margin-top:10px;font-weight:700;color:var(--ink);font-size:13px}
 
-  /* ---------- 主视觉 ---------- */
+  /* ---------- 主体 ---------- */
+  .main{margin-left:var(--sidebar-w);padding:56px 0 80px}
+  .wrap{max-width:920px;margin:0 auto;padding:0 40px}
+
   .hero{
-    position:relative;overflow:hidden;
-    background:
-      radial-gradient(ellipse at 78% 40%,rgba(34,211,238,.28),transparent 55%),
-      radial-gradient(ellipse at 20% 80%,rgba(105,90,255,.35),transparent 55%),
-      linear-gradient(135deg,#061435 0%,#0b2a70 55%,#0a1d55 100%);
+    margin:34px 0 30px;padding:38px 40px;border-radius:16px;
+    background:linear-gradient(135deg,#2f6df6 0%,#5b8def 55%,#7aa2f7 100%);
+    color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;
   }
-  .stars{position:absolute;inset:0;pointer-events:none;}
-  .stars i{
-    position:absolute;background:#fff;border-radius:50%;
-    animation:twinkle 3s infinite ease-in-out;
-  }
-  @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
-  .hero-inner{position:relative;z-index:2;min-height:470px;display:flex;align-items:center;}
-  .hero-copy{flex:1;padding:60px 0;color:#fff;max-width:600px;}
-  .tag{
-    display:inline-block;background:rgba(255,213,74,.15);border:1px solid rgba(255,213,74,.5);
-    color:var(--yellow);font-size:13px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:18px;
-  }
-  .hero h1{font-size:52px;line-height:1.2;letter-spacing:2px;margin-bottom:16px;}
-  .hero h1 em{font-style:normal;color:var(--yellow);}
-  .hero p.sub{font-size:17px;color:#bcd0f5;line-height:1.8;margin-bottom:28px;}
-  .hero-actions{display:flex;gap:14px;}
-  .btn-lg{padding:14px 34px;font-size:16px;border-radius:30px;}
-  .btn-cyan{background:linear-gradient(180deg,#5ee7ff,#12a4d8);color:#043a52;box-shadow:0 6px 20px rgba(18,164,216,.45);}
-  .btn-cyan:hover{box-shadow:0 8px 26px rgba(18,164,216,.7);}
-  .btn-outline{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.45);}
-  .btn-outline:hover{background:rgba(255,255,255,.18);}
+  .hero:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.1)}
+  .hero h1{margin:0 0 10px;font-size:30px;line-height:1.3;letter-spacing:.5px}
+  .hero p{margin:0;opacity:.92;font-size:14.5px}
+  .hero .meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
+  .hero .meta span{background:rgba(255,255,255,.18);padding:5px 13px;border-radius:20px;font-size:12.5px}
 
-  /* 右侧星球 + 精灵 */
-  .hero-art{flex:1;position:relative;height:470px;}
-  .planet{
-    position:absolute;left:50%;top:50%;width:280px;height:280px;margin:-140px 0 0 -140px;
-    border-radius:50%;
-    background:
-      radial-gradient(circle at 30% 28%,#8ef0ff 0%,#2aa7e6 28%,#1657c4 62%,#0a2770 100%);
-    box-shadow:0 0 60px rgba(34,211,238,.45),inset -20px -20px 50px rgba(0,0,0,.5);
-    animation:float 6s ease-in-out infinite;
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:26px 30px;margin-bottom:22px;box-shadow:var(--shadow);
   }
-  .planet::before{
-    content:"";position:absolute;inset:22px;border-radius:50%;
-    background:
-      radial-gradient(ellipse at 30% 60%,rgba(255,255,255,.18) 0 12%,transparent 13%),
-      radial-gradient(ellipse at 65% 35%,rgba(0,0,0,.15) 0 16%,transparent 17%),
-      radial-gradient(ellipse at 55% 75%,rgba(255,255,255,.12) 0 10%,transparent 11%);
+  section{scroll-margin-top:74px}
+  h2{
+    font-size:22px;margin:6px 0 18px;padding-bottom:12px;
+    border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:10px;
   }
-  .ring{
-    position:absolute;left:50%;top:50%;width:400px;height:110px;margin:-55px 0 0 -200px;
-    border:12px solid rgba(255,213,74,.75);border-radius:50%;transform:rotate(-22deg);
-    box-shadow:0 0 22px rgba(255,213,74,.35);
+  h2 .num{
+    background:var(--accent);color:#fff;font-size:13px;font-weight:700;
+    width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;flex:none;
   }
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-  .spirit{
-    position:absolute;font-size:46px;line-height:1;
-    filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));
-    animation:bob 4s ease-in-out infinite;
-  }
-  .spirit.s1{left:2%;top:18%;animation-delay:0s;}
-  .spirit.s2{right:2%;top:22%;animation-delay:.7s;font-size:40px;}
-  .spirit.s3{left:12%;bottom:14%;animation-delay:1.4s;font-size:38px;}
-  .spirit.s4{right:10%;bottom:10%;animation-delay:2.1s;}
-  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-16px) rotate(6deg)}}
+  h3{font-size:17px;margin:26px 0 10px;color:#243247;display:flex;align-items:center;gap:8px}
+  h3:before{content:"";width:4px;height:16px;background:var(--accent);border-radius:2px;display:inline-block}
+  h4{font-size:15px;margin:18px 0 8px;color:#334155}
+  p{margin:10px 0;color:var(--ink)}
+  ul,ol{margin:10px 0;padding-left:24px}
+  li{margin:5px 0}
+  strong{color:#111c2e}
 
-  /* ---------- 快捷入口 ---------- */
-  .quick{background:#fff;padding:38px 0 8px;}
-  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-  .qcard{
-    background:linear-gradient(180deg,#fff,#f2f7ff);
-    border:1px solid var(--line);border-radius:16px;padding:22px 18px;
-    display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;
-  }
-  .qcard:hover{transform:translateY(-5px);box-shadow:0 12px 26px rgba(22,119,255,.14);border-color:#bcd6ff;}
-  .qicon{
-    width:52px;height:52px;border-radius:14px;flex-shrink:0;
-    display:grid;place-items:center;font-size:26px;color:#fff;
-  }
-  .q1{background:linear-gradient(135deg,#42a5ff,#1565c0);}
-  .q2{background:linear-gradient(135deg,#ff8a65,#e53935);}
-  .q3{background:linear-gradient(135deg,#66d6a0,#0f9d58);}
-  .q4{background:linear-gradient(135deg,#ba68c8,#7b1fa2);}
-  .qcard h3{font-size:16px;margin-bottom:4px;}
-  .qcard p{font-size:12px;color:var(--muted);}
+  .callout{border-radius:10px;padding:13px 16px;margin:16px 0;font-size:14px;border-left:4px solid}
+  .callout .t{font-weight:700;margin-right:6px}
+  .callout.tip{background:var(--ok-soft);border-color:var(--ok);color:#146c41}
+  .callout.warn{background:var(--warn-soft);border-color:var(--warn);color:#8a5706}
+  .callout.danger{background:var(--danger-soft);border-color:var(--danger);color:#a32626}
+  .callout.info{background:var(--accent-soft);border-color:var(--accent);color:#1d4fb8}
 
-  /* ---------- 通用区块标题 ---------- */
-  section.block{padding:48px 0;}
-  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;}
-  .head h2{font-size:28px;position:relative;padding-left:16px;}
-  .head h2::before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:5px;border-radius:3px;background:linear-gradient(180deg,var(--cyan),var(--blue));}
-  .head h2 small{font-size:14px;color:var(--muted);font-weight:400;margin-left:10px;}
-  .head .more{font-size:14px;color:var(--blue);font-weight:600;}
-  .head .more:hover{text-decoration:underline;}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#f2f5fa;color:#243247;font-weight:600}
+  tbody tr:nth-child(even){background:#fafbfd}
+  code.kbd{background:#eef2f8;border:1px solid #dbe2ec;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12.5px;color:#1f3a63;font-family:Consolas,Monaco,monospace}
+  pre{
+    background:var(--code-bg);color:#d7e2f2;border-radius:10px;padding:16px 18px;
+    overflow-x:auto;font-size:13px;line-height:1.7;margin:14px 0;font-family:Consolas,Monaco,monospace;
+  }
+  pre .cm{color:#7f93b3}
+  pre .kw{color:#7dd3a0}
 
-  /* ---------- 新闻 ---------- */
-  .news{background:#f5f8ff;}
-  .news-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;}
-  .feature{
-    position:relative;min-height:280px;border-radius:18px;overflow:hidden;color:#fff;
-    background:linear-gradient(135deg,#0a2a72,#1677ff);padding:30px;
-    display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;
+  .steps{counter-reset:st;list-style:none;padding-left:0;margin:16px 0}
+  .steps li{position:relative;padding-left:42px;margin:12px 0}
+  .steps li:before{
+    counter-increment:st;content:counter(st);
+    position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;
+    display:flex;align-items:center;justify-content:center;
   }
-  .feature .glow{position:absolute;right:-30px;top:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.6),transparent 70%);}
-  .feature .badge{position:absolute;top:20px;left:20px;background:var(--orange);font-size:12px;font-weight:700;padding:5px 12px;border-radius:14px;}
-  .feature h3{font-size:26px;line-height:1.4;margin-bottom:10px;position:relative;}
-  .feature p{font-size:14px;color:#cfe0ff;position:relative;}
-  .feature:hover h3{color:var(--yellow);}
-  .newspanel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:8px 22px 18px;}
-  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);}
-  .tabs button{
-    border:0;background:transparent;font-family:inherit;font-size:15px;font-weight:700;
-    color:var(--muted);padding:14px 0;cursor:pointer;position:relative;
-  }
-  .tabs button.on{color:var(--blue);}
-  .tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--blue);border-radius:3px;}
-  .newslist{list-style:none;margin-top:8px;}
-  .newslist li{
-    display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);
-    font-size:14px;cursor:pointer;
-  }
-  .newslist li:last-child{border-bottom:0;}
-  .newslist li:hover a{color:var(--blue);}
-  .newslist .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;}
-  .newslist a{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .newslist time{color:var(--muted);font-size:12px;flex-shrink:0;}
-  .newslist .new{background:#ff4757;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;flex-shrink:0;}
+  .divider{height:1px;background:var(--line);margin:30px 0}
 
-  /* ---------- 精灵图鉴 ---------- */
-  .spirits{background:#fff;}
-  .spirit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-  .scard{
-    border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;
-    transition:.2s;cursor:pointer;
+  /* ---------- 返回顶部 ---------- */
+  #toTop{
+    position:fixed;right:26px;bottom:26px;width:44px;height:44px;border:none;border-radius:50%;
+    background:var(--accent);color:#fff;font-size:20px;cursor:pointer;
+    box-shadow:0 6px 18px rgba(47,109,246,.4);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;
   }
-  .scard:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(20,60,150,.16);}
-  .scover{height:150px;display:grid;place-items:center;font-size:70px;position:relative;
-    filter:drop-shadow(0 8px 10px rgba(0,0,0,.12));}
-  .c1{background:radial-gradient(circle at 50% 40%,#fff3cd,#ffd54a);}
-  .c2{background:radial-gradient(circle at 50% 40%,#d9f6ff,#6ec6ff);}
-  .c3{background:radial-gradient(circle at 50% 40%,#ffe0e0,#ff8a80);}
-  .c4{background:radial-gradient(circle at 50% 40%,#e5dbff,#b388ff);}
-  .type{
-    position:absolute;left:12px;top:12px;background:rgba(255,255,255,.85);color:#334;
-    font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;
-  }
-  .sbody{padding:16px;}
-  .sbody h3{font-size:17px;margin-bottom:6px;}
-  .sbody .desc{font-size:12px;color:var(--muted);line-height:1.6;height:38px;overflow:hidden;}
-  .stars{margin-top:10px;color:#ffb300;font-size:14px;letter-spacing:2px;}
-  .stars span{color:#d6ddea;}
+  #toTop.show{opacity:1;pointer-events:auto}
 
-  /* ---------- 游戏特色 ---------- */
-  .feature-sec{background:linear-gradient(180deg,#f5f8ff,#eaf1ff);}
-  .f-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
-  .fitem{text-align:center;padding:26px 16px;background:#fff;border-radius:18px;border:1px solid var(--line);transition:.2s;}
-  .fitem:hover{transform:translateY(-5px);box-shadow:0 12px 26px rgba(22,119,255,.12);}
-  .ficon{width:66px;height:66px;margin:0 auto 16px;border-radius:20px;display:grid;place-items:center;font-size:32px;color:#fff;}
-  .fitem h3{margin-bottom:8px;font-size:17px;}
-  .fitem p{font-size:13px;color:var(--muted);line-height:1.7;}
-
-  /* ---------- 页脚 ---------- */
-  footer{background:#071535;color:#9fb0d4;padding:38px 0 22px;font-size:13px;}
-  .f-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;}
-  .f-brand b{color:#fff;font-size:20px;letter-spacing:2px;display:block;margin-bottom:8px;}
-  .f-links{display:flex;gap:44px;}
-  .f-links div h4{color:#fff;font-size:14px;margin-bottom:12px;}
-  .f-links a{display:block;margin-bottom:7px;}
-  .f-links a:hover{color:var(--yellow);}
-  .f-bottom{border-top:1px solid #1c2c55;margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:#7688b0;line-height:1.8;}
-  .disclaimer{color:#ffb74d;}
+  .footer{text-align:center;color:#9aa5b4;font-size:12.5px;padding:20px 0 0}
 
   @media(max-width:900px){
-    .menu,.topbar{display:none;}
-    .hero-inner{flex-direction:column;text-align:center;}
-    .hero h1{font-size:38px;}
-    .hero-art{width:100%;}
-    .quick-grid,.spirit-grid,.f-grid{grid-template-columns:repeat(2,1fr);}
-    .news-grid{grid-template-columns:1fr;}
-    .f-links{gap:20px;}
+    .menu-btn{display:block}
+    .sidebar{transform:translateX(-100%);box-shadow:8px 0 30px rgba(20,30,50,.12)}
+    .sidebar.open{transform:translateX(0)}
+    .main{margin-left:0}
+    .wrap{padding:0 18px}
+    .hero{padding:28px 22px}
+    .card{padding:20px 18px}
+  }
+  @media print{
+    .topbar,.sidebar,#toTop{display:none}
+    .main{margin:0;padding:0}
+    .card{box-shadow:none;border:none;padding:0;margin-bottom:18px;break-inside:avoid}
+    .hero{background:#2f6df6 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
 </style>
 </head>
 <body>
 
-<!-- 顶部工具条 -->
 <div class="topbar">
-  <div class="wrap">
-    <span>欢迎来到赛尔号！<b>勇敢赛尔，探索宇宙</b></span>
-    <span>客服中心 | 家长监护 | 防沉迷系统</span>
-  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="打开目录">☰</button>
+  <div class="brand">桌面运维 <span>/</span> 基本手册</div>
+  <div class="spacer"></div>
+  <div class="ver">v1.0 · 2026-11</div>
 </div>
 
-<!-- 导航 -->
-<header class="nav">
-  <div class="wrap nav-inner">
-    <div class="logo">
-      <div class="orb"></div>
-      <span>赛尔号</span>
-    </div>
-    <nav class="menu">
-      <a href="#" class="active">首页</a>
-      <a href="#spirit">精灵图鉴</a>
-      <a href="#news">新闻中心</a>
-      <a href="#feature">游戏特色</a>
-      <a href="#">玩家社区</a>
-    </nav>
-    <div class="nav-btns">
-      <button class="btn btn-ghost">登录</button>
-      <button class="btn btn-gold">注册账号</button>
-    </div>
+<aside class="sidebar" id="sidebar">
+  <div class="search-wrap">
+    <span class="ico">🔍</span>
+    <input id="search" type="text" placeholder="筛选目录关键词…" autocomplete="off">
   </div>
-</header>
+  <div class="toc-title">目 录 CONTENTS</div>
+  <nav class="toc" id="toc">
+    <a href="#ch1" class="grp">第一章 概述</a>
+    <a href="#ch1-1" class="lv2">1.1 手册目的与适用范围</a>
+    <a href="#ch1-2" class="lv2">1.2 桌面环境组成</a>
 
-<!-- 主视觉 -->
-<section class="hero">
-  <div class="stars" id="stars"></div>
-  <div class="wrap hero-inner">
-    <div class="hero-copy">
-      <span class="tag">✦ 全新资料片「星海远征」震撼开启</span>
-      <h1>勇敢赛尔<br><em>探索宇宙</em></h1>
-      <p class="sub">集结你的精灵战队，穿越浩瀚星海，揭开宇宙深处的神秘面纱。<br>收集、培养、对战，属于你的赛尔传奇现在开始！</p>
-      <div class="hero-actions">
-        <button class="btn btn-lg btn-cyan">▶ 开始游戏</button>
-        <button class="btn btn-lg btn-outline">查看精灵图鉴</button>
-      </div>
-    </div>
-    <div class="hero-art">
-      <div class="ring"></div>
-      <div class="planet"></div>
-      <div class="spirit s1">🐲</div>
-      <div class="spirit s2">🦊</div>
-      <div class="spirit s3">🐼</div>
-      <div class="spirit s4">🧊</div>
-    </div>
-  </div>
-</section>
+    <a href="#ch2" class="grp">第二章 Windows 基础操作</a>
+    <a href="#ch2-1" class="lv2">2.1 桌面与任务栏</a>
+    <a href="#ch2-2" class="lv2">2.2 文件与文件夹管理</a>
+    <a href="#ch2-3" class="lv2">2.3 程序安装与卸载</a>
+    <a href="#ch2-4" class="lv2">2.4 常用快捷键</a>
 
-<!-- 快捷入口 -->
-<section class="quick">
-  <div class="wrap quick-grid">
-    <div class="qcard"><div class="qicon q1">⚔️</div><div><h3>对战大厅</h3><p>与其他赛尔一决高下</p></div></div>
-    <div class="qcard"><div class="qicon q2">🎁</div><div><h3>每日任务</h3><p>登录领奖，惊喜不断</p></div></div>
-    <div class="qcard"><div class="qicon q3">🗺️</div><div><h3>星图探险</h3><p>探索未知星球秘境</p></div></div>
-    <div class="qcard"><div class="qicon q4">🏪</div><div><h3>精灵商城</h3><p>稀有道具限时上架</p></div></div>
-  </div>
-</section>
+    <a href="#ch3" class="grp">第三章 常用办公软件</a>
+    <a href="#ch3-1" class="lv2">3.1 文档处理（WPS / Office）</a>
+    <a href="#ch3-2" class="lv2">3.2 电子表格</a>
+    <a href="#ch3-3" class="lv2">3.3 浏览器与邮件</a>
+    <a href="#ch3-4" class="lv2">3.4 压缩与 PDF 工具</a>
 
-<!-- 新闻中心 -->
-<section class="block news" id="news">
+    <a href="#ch4" class="grp">第四章 企业安全软件</a>
+    <a href="#ch4-1" class="lv2">4.1 终端防病毒</a>
+    <a href="#ch4-2" class="lv2">4.2 网络准入 NAC</a>
+    <a href="#ch4-3" class="lv2">4.3 数据防泄漏 DLP</a>
+    <a href="#ch4-4" class="lv2">4.4 云桌面使用要点</a>
+
+    <a href="#ch5" class="grp">第五章 故障处理思路</a>
+    <a href="#ch5-1" class="lv2">5.1 基本原则</a>
+    <a href="#ch5-2" class="lv2">5.2 标准排查流程</a>
+    <a href="#ch5-3" class="lv2">5.3 常用系统命令</a>
+
+    <a href="#ch6" class="grp">第六章 常见故障与处理</a>
+    <a href="#ch6-1" class="lv2">6.1 系统类故障</a>
+    <a href="#ch6-2" class="lv2">6.2 网络类故障</a>
+    <a href="#ch6-3" class="lv2">6.3 软件类故障</a>
+    <a href="#ch6-4" class="lv2">6.4 外设类故障</a>
+    <a href="#ch6-5" class="lv2">6.5 安全软件类问题</a>
+
+    <a href="#ch7" class="grp">第七章 日常维护与预防</a>
+    <a href="#ch7-1" class="lv2">7.1 更新与补丁</a>
+    <a href="#ch7-2" class="lv2">7.2 数据备份</a>
+    <a href="#ch7-3" class="lv2">7.3 账号与密码安全</a>
+
+    <a href="#ch8" class="grp">第八章 报修与服务支持</a>
+    <a href="#ch8-1" class="lv2">8.1 报修前准备</a>
+    <a href="#ch8-2" class="lv2">8.2 报修流程</a>
+
+    <a href="#appendix" class="grp">附录</a>
+    <a href="#ap-1" class="lv2">附录A 快捷键速查表</a>
+    <a href="#ap-2" class="lv2">附录B 常见蓝屏代码</a>
+  </nav>
+</aside>
+
+<main class="main">
   <div class="wrap">
-    <div class="head">
-      <h2>新闻中心 <small>NEWS CENTER</small></h2>
-      <a href="#" class="more">更多资讯 →</a>
-    </div>
-    <div class="news-grid">
-      <div class="feature">
-        <div class="glow"></div>
-        <span class="badge">热点</span>
-        <h3>「星海远征」资料片正式上线<br>全新精灵等你来战！</h3>
-        <p>探索全新星域，解锁传说级精灵，更有海量福利活动同期开启。</p>
-      </div>
-      <div class="newspanel">
-        <div class="tabs">
-          <button class="on" data-tab="notice">最新公告</button>
-          <button data-tab="event">游戏活动</button>
-        </div>
-        <ul class="newslist" id="notice">
-          <li><span class="dot"></span><a href="#">关于游戏服务器周末维护的公告</a><span class="new">NEW</span><time>11-16</time></li>
-          <li><span class="dot"></span><a href="#">精灵图鉴新增：远古系谱系大盘点</a><time>11-15</time></li>
-          <li><span class="dot"></span><a href="#">账号安全提醒：谨防虚假中奖信息</a><time>11-14</time></li>
-          <li><span class="dot"></span><a href="#">叛逆会员专属福利领取说明</a><time>11-12</time></li>
-          <li><span class="dot"></span><a href="#">客户端版本更新至 V12.8 正式版</a><time>11-10</time></li>
-        </ul>
-        <ul class="newslist" id="event" style="display:none">
-          <li><span class="dot"></span><a href="#">双倍经验狂欢周，全服开启！</a><span class="new">HOT</span><time>11-16</time></li>
-          <li><span class="dot"></span><a href="#">限时抽卡：传说精灵「炽焰战神」</a><time>11-15</time></li>
-          <li><span class="dot"></span><a href="#">签到七天送稀有精灵蛋</a><time>11-13</time></li>
-          <li><span class="dot"></span><a href="#">战队争霸赛报名火热进行中</a><time>11-11</time></li>
-          <li><span class="dot"></span><a href="#">节日礼包限时折扣发售</a><time>11-09</time></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- 精灵图鉴 -->
-<section class="block spirits" id="spirit">
-  <div class="wrap">
-    <div class="head">
-      <h2>热门精灵 <small>SPIRIT GUIDE</small></h2>
-      <a href="#" class="more">查看全部 →</a>
-    </div>
-    <div class="spirit-grid">
-      <div class="scard">
-        <div class="scover c1"><span class="type">🔥 火系</span>🐲</div>
-        <div class="sbody"><h3>炽焰战神</h3><div class="desc">掌控火焰之力的远古战士，攻击力极强。</div><div class="stars">★★★★★</div></div>
-      </div>
-      <div class="scard">
-        <div class="scover c2"><span class="type">💧 水系</span>🐳</div>
-        <div class="sbody"><h3>深海守望者</h3><div class="desc">来自深海的守护精灵，拥有强大的防御。</div><div class="stars">★★★★<span>★</span></div></div>
-      </div>
-      <div class="scard">
-        <div class="scover c3"><span class="type">🌿 草系</span>🦊</div>
-        <div class="sbody"><h3>森之灵狐</h3><div class="desc">敏捷的森林精灵，擅长速度与控制。</div><div class="stars">★★★★<span>★</span></div></div>
-      </div>
-      <div class="scard">
-        <div class="scover c4"><span class="type">⚡ 电系</span>🦅</div>
-        <div class="sbody"><h3>雷鸣天鹰</h3><div class="desc">以雷电为翼的天空霸主，速度惊人。</div><div class="stars">★★★★★</div></div>
+    <div class="hero">
+      <h1>桌面软件使用与故障处理基本手册</h1>
+      <p>面向办公终端用户的桌面软件使用指南与常见故障自助排查参考</p>
+      <div class="meta">
+        <span>📘 版本 v1.0</span>
+        <span>🗓 2026 年 11 月</span>
+        <span>🖥 适用 Windows 10 / 11</span>
+        <span>🔗 点击左侧目录可跳转</span>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- 游戏特色 -->
-<section class="block feature-sec" id="feature">
-  <div class="wrap">
-    <div class="head">
-      <h2>游戏特色 <small>FEATURES</small></h2>
+    <!-- 第一章 -->
+    <div class="card">
+      <section id="ch1">
+        <h2><span class="num">1</span>概述</h2>
+        <section id="ch1-1">
+          <h3>1.1 手册目的与适用范围</h3>
+          <p>本手册用于帮助办公终端用户<strong>正确使用桌面常用软件</strong>，并在遇到常见故障时能够<strong>先行自助排查</strong>，减少等待时间、提升问题解决效率。适合以下人群：</p>
+          <ul>
+            <li>日常使用电脑处理文档、表格、邮件的普通办公人员；</li>
+            <li>新入职、需要快速熟悉公司桌面环境的同事；</li>
+            <li>希望了解基础故障判断方法、便于与 IT 支持沟通的用户。</li>
+          </ul>
+          <div class="callout info"><span class="t">说明</span>本手册以 Windows 环境为主，涉及的企业安全软件名称可按本单位实际部署情况替换。</div>
+        </section>
+        <section id="ch1-2">
+          <h3>1.2 桌面环境组成</h3>
+          <p>一套完整的办公桌面环境通常由以下几部分构成，了解它们有助于定位问题归属：</p>
+          <table>
+            <thead><tr><th>组成</th><th>典型内容</th><th>主要作用</th></tr></thead>
+            <tbody>
+              <tr><td>操作系统</td><td>Windows 10 / 11</td><td>提供桌面、文件、程序运行的基础平台</td></tr>
+              <tr><td>办公软件</td><td>WPS / Microsoft Office、浏览器、邮件客户端</td><td>完成日常文档、沟通与信息处理</td></tr>
+              <tr><td>安全软件</td><td>终端防病毒、网络准入、数据防泄漏</td><td>保障终端与数据安全，满足合规要求</td></tr>
+              <tr><td>外设</td><td>打印机、键鼠、显示器、摄像头</td><td>扩展输入、输出与交互能力</td></tr>
+              <tr><td>桌面交付</td><td>云桌面 / 虚拟桌面客户端</td><td>远程访问办公桌面与应用</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
     </div>
-    <div class="f-grid">
-      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#42a5ff,#1565c0)">🚀</div><h3>星海探索</h3><p>驾驶飞船穿越星河，发现数百颗神秘星球。</p></div>
-      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#ff8a65,#e53935)">🐾</div><h3>精灵收集</h3><p>上千种精灵任你捕捉，打造专属梦幻战队。</p></div>
-      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#66d6a0,#0f9d58)">⚔️</div><h3>策略对战</h3><p>属性相克、技能搭配，用智慧赢取每场胜利。</p></div>
-      <div class="fitem"><div class="ficon" style="background:linear-gradient(135deg,#ba68c8,#7b1fa2)">🏆</div><h3>成长进阶</h3><p>进化、融合、超能训练，见证精灵的蜕变。</p></div>
-    </div>
-  </div>
-</section>
 
-<!-- 页脚 -->
-<footer>
-  <div class="wrap">
-    <div class="f-top">
-      <div class="f-brand">
-        <b>赛尔号</b>
-        <p>勇敢赛尔，探索宇宙<br>一起开启星际冒险之旅</p>
-      </div>
-      <div class="f-links">
-        <div><h4>关于游戏</h4><a href="#">游戏介绍</a><a href="#">新手指南</a><a href="#">常见问题</a></div>
-        <div><h4>玩家支持</h4><a href="#">客服中心</a><a href="#">账号找回</a><a href="#">防沉迷系统</a></div>
-        <div><h4>关注我们</h4><a href="#">官方微博</a><a href="#">微信公众号</a><a href="#">玩家社区</a></div>
-      </div>
+    <!-- 第二章 -->
+    <div class="card">
+      <section id="ch2">
+        <h2><span class="num">2</span>Windows 桌面基础操作</h2>
+        <section id="ch2-1">
+          <h3>2.1 桌面与任务栏</h3>
+          <ul>
+            <li><strong>显示桌面：</strong>点击任务栏最右侧窄条，或按 <code class="kbd">Win + D</code>。</li>
+            <li><strong>切换窗口：</strong><code class="kbd">Alt + Tab</code> 在已打开程序间快速切换。</li>
+            <li><strong>任务栏固定：</strong>右键程序图标 →「固定到任务栏」，方便常用软件一键打开。</li>
+            <li><strong>多桌面：</strong><code class="kbd">Win + Ctrl + 左/右</code> 切换虚拟桌面，可将工作与私人窗口分开。</li>
+          </ul>
+          <div class="callout tip"><span class="t">建议</span>桌面图标不宜过多，可按「文档 / 工具 / 临时」分类放入文件夹，保持界面整洁也便于定位文件。</div>
+        </section>
+        <section id="ch2-2">
+          <h3>2.2 文件与文件夹管理</h3>
+          <ul>
+            <li><strong>打开资源管理器：</strong><code class="kbd">Win + E</code>。</li>
+            <li><strong>显示文件扩展名：</strong>「查看」→ 勾选「文件扩展名」，便于识别文件真实类型。</li>
+            <li><strong>规范命名：</strong>推荐使用「日期_主题_版本」格式，如 <code class="kbd">20261117_项目周报_v2.docx</code>。</li>
+            <li><strong>分类存放：</strong>按项目或业务建立文件夹，避免所有文件堆在桌面和「下载」目录。</li>
+          </ul>
+          <div class="callout warn"><span class="t">注意</span>切勿随意修改或删除不熟悉的系统文件（尤其是 C:\Windows、Program Files 目录下），以免造成系统异常。</div>
+        </section>
+        <section id="ch2-3">
+          <h3>2.3 程序安装与卸载</h3>
+          <p><strong>安装原则：</strong>优先从公司软件平台或官方渠道获取安装包，不安装来源不明的软件。</p>
+          <p><strong>卸载方式（任选其一）：</strong></p>
+          <ol>
+            <li>设置 → 应用 → 应用和功能 → 选择程序 → 卸载（推荐）；</li>
+            <li>控制面板 → 程序和功能；</li>
+            <li>使用软件自带的卸载程序。<strong>不建议</strong>直接删除安装文件夹，会残留注册表和组件。</li>
+          </ol>
+          <div class="callout danger"><span class="t">风险提示</span>破解软件、外挂、来源不明的插件常携带木马或勒索病毒，是终端安全事件的高发源头，严禁安装。</div>
+        </section>
+        <section id="ch2-4">
+          <h3>2.4 常用快捷键</h3>
+          <p>更多快捷键见 <a href="#ap-1">附录A 快捷键速查表</a>。以下几个日常高频组合建议熟练掌握：</p>
+          <table>
+            <thead><tr><th>快捷键</th><th>功能</th></tr></thead>
+            <tbody>
+              <tr><td><code class="kbd">Ctrl + C / V / X</code></td><td>复制 / 粘贴 / 剪切</td></tr>
+              <tr><td><code class="kbd">Ctrl + Z</code></td><td>撤销上一步操作</td></tr>
+              <tr><td><code class="kbd">Ctrl + S</code></td><td>保存当前文件</td></tr>
+              <tr><td><code class="kbd">Ctrl + Shift + Esc</code></td><td>直接打开任务管理器</td></tr>
+              <tr><td><code class="kbd">Win + R</code></td><td>打开「运行」对话框</td></tr>
+              <tr><td><code class="kbd">Win + L</code></td><td>锁定计算机（离开工位请养成习惯）</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
     </div>
-    <div class="f-bottom">
-      <p>赛尔号 · 一个充满想象力的星际冒险世界</p>
-      <p class="disclaimer">※ 本页面为个人练习用的仿写 Demo，非官方网站，所有素材仅作学习展示使用。</p>
-      <p>© 2026 Seer Fan-made Demo. All rights reserved.</p>
+
+    <!-- 第三章 -->
+    <div class="card">
+      <section id="ch3">
+        <h2><span class="num">3</span>常用办公软件</h2>
+        <section id="ch3-1">
+          <h3>3.1 文档处理（WPS / Office）</h3>
+          <ul>
+            <li><strong>及时保存：</strong>养成 <code class="kbd">Ctrl + S</code> 习惯，重要文档可开启「自动保存 / 定时备份」。</li>
+            <li><strong>格式兼容：</strong>对外发送文件优先使用通用格式（.docx / .pdf），避免冷门格式对方无法打开。</li>
+            <li><strong>文档加密：</strong>含敏感信息的文档可设置打开密码，并通过内部渠道另行告知密码。</li>
+            <li><strong>异常恢复：</strong>程序崩溃后重新打开，通常会在左侧/恢复窗格提示恢复未保存的文档。</li>
+          </ul>
+        </section>
+        <section id="ch3-2">
+          <h3>3.2 电子表格</h3>
+          <ul>
+            <li>大量数据建议使用「表格」功能和筛选，避免手工逐行核对。</li>
+            <li>公式出错常见原因：单元格格式为文本、引用区域错误、循环引用。</li>
+            <li>重要报表保留原始数据副本，处理过程在新副本上进行，便于回溯。</li>
+          </ul>
+          <div class="callout tip"><span class="t">技巧</span>按 <code class="kbd">F4</code> 可快速重复上一步操作；<code class="kbd">Ctrl + Arrow</code> 可跳到数据区域边缘，处理长表格非常高效。</div>
+        </section>
+        <section id="ch3-3">
+          <h3>3.3 浏览器与邮件</h3>
+          <ul>
+            <li><strong>浏览器：</strong>保持浏览器为受支持版本，OA、业务系统建议使用指定的内核/浏览器以获得最佳兼容。</li>
+            <li><strong>网页打不开：</strong>先尝试刷新（<code class="kbd">F5</code>）、无痕窗口、清理缓存，再判断是否网络问题。</li>
+            <li><strong>邮件：</strong>谨慎打开陌生附件和链接，尤其是 .exe、.scr、带宏的文档，防范钓鱼邮件。</li>
+            <li><strong>发大附件：</strong>超过邮箱限制时改用公司文件共享或云盘链接，避免反复退信。</li>
+          </ul>
+          <div class="callout warn"><span class="t">注意</span>业务系统提示「证书不受信任」「插件未安装」时，不要盲目跳过，应先联系系统管理员确认。</div>
+        </section>
+        <section id="ch3-4">
+          <h3>3.4 压缩与 PDF 工具</h3>
+          <ul>
+            <li><strong>压缩文件：</strong>常用 ZIP / 7z 格式，发送多文件时打包可提升传输效率；解压时注意核对来源。</li>
+            <li><strong>PDF 阅读：</strong>使用系统默认或公司统一阅读器；PDF 转 Word 建议在受控工具中完成，避免上传敏感文件到不明网站。</li>
+            <li><strong>防勒索：</strong>不要打开邮件或群里来路不明的「发票.zip」「订单.zip」等压缩包。</li>
+          </ul>
+        </section>
+      </section>
     </div>
+
+    <!-- 第四章 -->
+    <div class="card">
+      <section id="ch4">
+        <h2><span class="num">4</span>企业安全软件</h2>
+        <div class="callout info"><span class="t">说明</span>以下以常见的终端安全体系为例。请按本单位实际部署的产品名称和操作界面执行，遇到不确定的策略勿自行关闭或卸载。</div>
+        <section id="ch4-1">
+          <h3>4.1 终端防病毒</h3>
+          <ul>
+            <li>保持客户端<strong>在线、病毒库为最新</strong>，不要长期暂停实时防护。</li>
+            <li>定期执行全盘扫描；发现病毒按提示进行隔离/清除后再复查。</li>
+            <li>若出现误报，保留文件路径与截图，提交安全管理员确认，不要直接添加信任。</li>
+          </ul>
+        </section>
+        <section id="ch4-2">
+          <h3>4.2 网络准入 NAC</h3>
+          <ul>
+            <li>接入公司网络需安装并运行准入客户端，完成身份认证与安全合规检查。</li>
+            <li>无法上网且客户端提示「不合规」时，通常是系统补丁、杀毒状态或密码策略未达标，按提示修复。</li>
+            <li>更换工位、改变接入方式后如认证失败，可先重启客户端与网卡再重试。</li>
+          </ul>
+        </section>
+        <section id="ch4-3">
+          <h3>4.3 数据防泄漏 DLP</h3>
+          <ul>
+            <li>DLP 会对敏感数据的外发行为进行管控或告警，属正常合规措施。</li>
+            <li>外发文件被拦截时，确认业务是否合规；确需放行的按流程申请审批。</li>
+            <li>严禁通过私人网盘、即时通讯工具、个人邮箱外传涉密或敏感资料。</li>
+          </ul>
+        </section>
+        <section id="ch4-4">
+          <h3>4.4 云桌面使用要点</h3>
+          <ul>
+            <li>使用专用客户端连接，输入分配的账号与密码；首次连接按提示安装组件。</li>
+            <li>遇到卡顿先检查本地网络，再尝试重连；不要把账号密码保存在公用设备上。</li>
+            <li>云桌面中的数据同样按保密要求管理，退出时正常注销而非直接断开。</li>
+          </ul>
+        </section>
+      </section>
+    </div>
+
+    <!-- 第五章 -->
+    <div class="card">
+      <section id="ch5">
+        <h2><span class="num">5</span>故障处理思路</h2>
+        <section id="ch5-1">
+          <h3>5.1 基本原则</h3>
+          <ol class="steps">
+            <li><strong>先确认现象：</strong>是偶发还是必现？影响自己还是所有人？何时开始？</li>
+            <li><strong>先易后难：</strong>先做重启、重插、刷新、换端口等低风险操作，再深入排查。</li>
+            <li><strong>每次只改一个变量：</strong>便于判断哪一项操作真正解决了问题。</li>
+            <li><strong>留存证据：</strong>截图、报错文字、时间点是后续分析和报修的关键。</li>
+            <li><strong>不破坏现场：</strong>重大故障不要反复重装、格式化，先保护数据并上报。</li>
+          </ol>
+          <div class="callout danger"><span class="t">红线</span>涉及数据恢复、系统重装、格式化硬盘等操作，务必先备份并联系 IT 支持，切勿自行冒险处理。</div>
+        </section>
+        <section id="ch5-2">
+          <h3>5.2 标准排查流程</h3>
+          <p>可归纳为「问、看、查、试、记」五步：</p>
+          <table>
+            <thead><tr><th>步骤</th><th>要点</th></tr></thead>
+            <tbody>
+              <tr><td>问</td><td>确认故障现象、发生时间、是否改动过设置或安装过软件</td></tr>
+              <tr><td>看</td><td>查看报错提示、指示灯、告警窗口，记录原文</td></tr>
+              <tr><td>查</td><td>按「网络 → 软件 → 系统 → 硬件」逐层检查</td></tr>
+              <tr><td>试</td><td>做单点验证：重启、换线、换端口、以其他账号登录</td></tr>
+              <tr><td>记</td><td>记录已尝试的操作与结果，便于交接和升级处理</td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section id="ch5-3">
+          <h3>5.3 常用系统命令</h3>
+          <p>按 <code class="kbd">Win + R</code> 输入 <code class="kbd">cmd</code> 回车，或使用 PowerShell 执行：</p>
+          <pre><span class="cm">:: 网络连通性排查</span>
+ipconfig /all          <span class="cm">查看完整网络配置</span>
+ipconfig /release      <span class="cm">释放当前 IP 地址</span>
+ipconfig /renew        <span class="cm">重新获取 IP 地址</span>
+ping 127.0.0.1         <span class="cm">测试本机 TCP/IP 协议栈</span>
+ping 192.168.1.1       <span class="cm">测试到网关的连通（网关地址以实际为准）</span>
+ping www.baidu.com     <span class="cm">测试外网连通与 DNS 解析</span>
+nslookup www.baidu.com <span class="cm">查询域名解析是否正常</span>
+tracert www.baidu.com  <span class="cm">跟踪路由，定位网络中断位置</span>
+
+<span class="cm">:: 系统检查与修复</span>
+sfc /scannow           <span class="cm">扫描并修复受损系统文件</span>
+chkdsk C: /f           <span class="cm">检查并修复磁盘错误</span>
+taskmgr                <span class="cm">打开任务管理器</span>
+eventvwr.msc           <span class="cm">打开事件查看器，查看系统日志</span></pre>
+          <div class="callout tip"><span class="t">提示</span>上述命令需按实际网络环境调整网关与测试地址；执行修复类命令（sfc / chkdsk）可能需要管理员权限并重启。</div>
+        </section>
+      </section>
+    </div>
+
+    <!-- 第六章 -->
+    <div class="card">
+      <section id="ch6">
+        <h2><span class="num">6</span>常见故障与处理</h2>
+        <section id="ch6-1">
+          <h3>6.1 系统类故障</h3>
+          <table>
+            <thead><tr><th>现象</th><th>可能原因</th><th>自助处理</th></tr></thead>
+            <tbody>
+              <tr><td>电脑无法开机 / 无显示</td><td>电源、显示器信号源、内存松动</td><td>检查电源线与插座；确认显示器输入源；重插电源线；仍不行报修</td></tr>
+              <tr><td>开机蓝屏</td><td>驱动异常、系统文件损坏、硬件故障</td><td>记录蓝屏代码（见附录B）；重启尝试进入安全模式；联系 IT</td></tr>
+              <tr><td>系统卡顿、风扇狂转</td><td>后台程序占用、过热、磁盘空间不足</td><td>任务管理器查看 CPU/内存占用；清理磁盘；清灰；关闭无用启动项</td></tr>
+              <tr><td>无法进入系统</td><td>系统更新失败、引导损坏</td><td>不要反复强制断电；记录提示信息并上报，避免自行重装</td></tr>
+            </tbody>
+          </table>
+          <div class="callout tip"><span class="t">优先动作</span>多数偶发系统异常，一次正常重启即可恢复。重启前请先保存好正在编辑的文档。</div>
+        </section>
+        <section id="ch6-2">
+          <h3>6.2 网络类故障</h3>
+          <p>建议按「本地 → 内网 → 外网」顺序逐层判断：</p>
+          <ol class="steps">
+            <li><strong>看连接：</strong>网线是否插牢、Wi-Fi 是否已连接、网口指示灯是否亮。</li>
+            <li><strong>看地址：</strong><code class="kbd">ipconfig /all</code> 检查是否获取到有效 IP，是否出现 169.254 开头的自动地址。</li>
+            <li><strong>测内网：</strong><code class="kbd">ping 网关地址</code>，不通则多为本地或接入问题。</li>
+            <li><strong>测外网：</strong><code class="kbd">ping www.baidu.com</code>，不通但内网通，多为 DNS 或出口问题。</li>
+            <li><strong>测 DNS：</strong><code class="kbd">nslookup</code> 验证解析；可尝试 <code class="kbd">ipconfig /flushdns</code> 刷新缓存。</li>
+          </ol>
+          <div class="callout warn"><span class="t">注意</span>若整层楼或整个部门同时断网，通常为网络侧故障，无需逐台排查，直接联系网络管理员确认。</div>
+        </section>
+        <section id="ch6-3">
+          <h3>6.3 软件类故障</h3>
+          <table>
+            <thead><tr><th>现象</th><th>排查方向</th></tr></thead>
+            <tbody>
+              <tr><td>软件打不开 / 闪退</td><td>重启软件与电脑；以管理员身份运行；检查是否版本过旧或与系统不兼容</td></tr>
+              <tr><td>安装失败</td><td>确认有管理员权限；关闭杀毒临时拦截（经确认后）；清理残留后重装</td></tr>
+              <tr><td>业务系统打不开</td><td>检查是否需专用浏览器/插件；确认账号是否有效；清理缓存后重试</td></tr>
+              <tr><td>文件损坏打不开</td><td>尝试用软件「打开并修复」；从备份或邮件附件重新获取</td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section id="ch6-4">
+          <h3>6.4 外设类故障</h3>
+          <ul>
+            <li><strong>打印机无法打印：</strong>确认打印机在线且非缺纸/卡纸；设为默认打印机；清空打印队列；重装或更新驱动。</li>
+            <li><strong>键盘鼠标失灵：</strong>重插 USB 接口或换接口；更换线缆；无线设备检查电池与接收器。</li>
+            <li><strong>显示器异常：</strong>确认信号源正确；重插视频线；调整分辨率；花屏/竖线多为硬件故障需报修。</li>
+            <li><strong>摄像头/麦克风：</strong>在系统隐私设置中确认应用有权限；检查是否被其他程序占用。</li>
+          </ul>
+        </section>
+        <section id="ch6-5">
+          <h3>6.5 安全软件类问题</h3>
+          <table>
+            <thead><tr><th>现象</th><th>处理方式</th></tr></thead>
+            <tbody>
+              <tr><td>病毒告警 / 文件被隔离</td><td>不要立即恢复或加信任，保留截图与路径，交安全管理员研判</td></tr>
+              <tr><td>客户端离线 / 无法更新</td><td>检查网络连通；确认服务未被禁用；重启客户端</td></tr>
+              <tr><td>合规检查不通过</td><td>按提示补齐系统补丁、开启防护、修改弱密码后重新检查</td></tr>
+              <tr><td>正常文件被误拦截</td><td>提交白名单申请，经审批后由管理员处理</td></tr>
+            </tbody>
+          </table>
+          <div class="callout danger"><span class="t">严禁</span>为图方便长期关闭杀毒实时防护、绕过准入或卸载安全客户端。此类行为可能导致终端被隔离或触发安全事件。</div>
+        </section>
+      </section>
+    </div>
+
+    <!-- 第七章 -->
+    <div class="card">
+      <section id="ch7">
+        <h2><span class="num">7</span>日常维护与预防</h2>
+        <section id="ch7-1">
+          <h3>7.1 更新与补丁</h3>
+          <ul>
+            <li>保持操作系统与办公软件在受支持版本，及时安装安全补丁。</li>
+            <li>公司统一推送的补丁/策略建议在工作时间结束后保持开机，以便完成安装。</li>
+            <li>更新后如出现异常，记录更新时间与现象，便于回滚或定位。</li>
+          </ul>
+        </section>
+        <section id="ch7-2">
+          <h3>7.2 数据备份</h3>
+          <ul>
+            <li>重要文件遵循「本地 + 公司云盘/共享」双份保存原则。</li>
+            <li>遵循 3-2-1 思路：至少 3 份副本、2 种介质、1 份异地。</li>
+            <li>定期检查备份是否可正常打开，避免关键时刻发现备份无效。</li>
+          </ul>
+        </section>
+        <section id="ch7-3">
+          <h3>7.3 账号与密码安全</h3>
+          <ul>
+            <li>不同系统使用不同密码，避免使用生日、姓名、连续数字等弱密码。</li>
+            <li>开启多因素认证（MFA），离开工位执行 <code class="kbd">Win + L</code> 锁屏。</li>
+            <li>不向任何人透露验证码与密码；IT 支持不会索要你的账号密码。</li>
+          </ul>
+          <div class="callout tip"><span class="t">习惯养成</span>「离座即锁屏、邮件先核验、附件不轻点、密码不共用」—— 四条简单规则能挡住绝大多数常见安全事件。</div>
+        </section>
+      </section>
+    </div>
+
+    <!-- 第八章 -->
+    <div class="card">
+      <section id="ch8">
+        <h2><span class="num">8</span>报修与服务支持</h2>
+        <section id="ch8-1">
+          <h3>8.1 报修前准备</h3>
+          <p>为提高处理效率，报修时请尽量提供以下信息：</p>
+          <ul>
+            <li><strong>基本信息：</strong>姓名、部门、工位/电话号码、资产编号；</li>
+            <li><strong>故障现象：</strong>具体报错原文、发生时间、是否可复现；</li>
+            <li><strong>影响范围：</strong>仅本机还是多人、是否影响关键业务；</li>
+            <li><strong>已做操作：</strong>已尝试过哪些方法、结果如何；</li>
+            <li><strong>证据材料：</strong>报错截图、蓝屏代码、照片等。</li>
+          </ul>
+        </section>
+        <section id="ch8-2">
+          <h3>8.2 报修流程</h3>
+          <ol class="steps">
+            <li>按本手册完成基础自助排查；</li>
+            <li>通过公司指定渠道（服务台 / 工单系统 / 电话）提交报修；</li>
+            <li>描述问题并附上准备好的信息，获得工单号；</li>
+            <li>配合工程师远程或现场处理，验证解决后确认关闭工单。</li>
+          </ol>
+          <div class="callout info"><span class="t">提示</span>紧急且影响面大的故障（如大面积断网、系统无法启动）请优先电话联系服务台，并在后续补做工单记录。</div>
+        </section>
+      </section>
+    </div>
+
+    <!-- 附录 -->
+    <div class="card">
+      <section id="appendix">
+        <h2><span class="num">A</span>附录</h2>
+        <section id="ap-1">
+          <h3>附录A 快捷键速查表</h3>
+          <table>
+            <thead><tr><th>快捷键</th><th>功能</th><th>快捷键</th><th>功能</th></tr></thead>
+            <tbody>
+              <tr><td><code class="kbd">Win + E</code></td><td>资源管理器</td><td><code class="kbd">Win + R</code></td><td>运行</td></tr>
+              <tr><td><code class="kbd">Win + D</code></td><td>显示桌面</td><td><code class="kbd">Win + L</code></td><td>锁定屏幕</td></tr>
+              <tr><td><code class="kbd">Win + I</code></td><td>系统设置</td><td><code class="kbd">Win + S</code></td><td>搜索</td></tr>
+              <tr><td><code class="kbd">Alt + Tab</code></td><td>切换窗口</td><td><code class="kbd">Alt + F4</code></td><td>关闭窗口</td></tr>
+              <tr><td><code class="kbd">Ctrl + Shift + Esc</code></td><td>任务管理器</td><td><code class="kbd">F5</code></td><td>刷新</td></tr>
+              <tr><td><code class="kbd">PrtSc</code></td><td>全屏截图</td><td><code class="kbd">Win + Shift + S</code></td><td>区域截图</td></tr>
+              <tr><td><code class="kbd">Ctrl + S</code></td><td>保存</td><td><code class="kbd">Ctrl + P</code></td><td>打印</td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section id="ap-2">
+          <h3>附录B 常见蓝屏代码</h3>
+          <table>
+            <thead><tr><th>错误代码</th><th>常见含义</th><th>初步方向</th></tr></thead>
+            <tbody>
+              <tr><td><code class="kbd">0x0000001A</code></td><td>MEMORY_MANAGEMENT 内存管理错误</td><td>内存条/驱动，建议报修检测</td></tr>
+              <tr><td><code class="kbd">0x00000050</code></td><td>PAGE_FAULT_IN_NONPAGED_AREA</td><td>内存或驱动异常，记录后上报</td></tr>
+              <tr><td><code class="kbd">0x0000007B</code></td><td>INACCESSIBLE_BOOT_DEVICE 无法访问启动设备</td><td>磁盘/引导/BIOS 设置，勿自行重装</td></tr>
+              <tr><td><code class="kbd">0x000000ED</code></td><td>UNMOUNTABLE_BOOT_VOLUME 启动卷无法挂载</td><td>磁盘故障可能，先备份数据</td></tr>
+              <tr><td><code class="kbd">0xC000021A</code></td><td>STATUS_SYSTEM_PROCESS_TERMINATED</td><td>系统进程终止，多为软件冲突</td></tr>
+            </tbody>
+          </table>
+          <div class="callout warn"><span class="t">说明</span>蓝屏代码仅作初步参考，同一代码可能由不同原因引起。处理时以记录代码 + 最近操作 + 现场现象为准，交由 IT 支持综合判断。</div>
+        </section>
+      </section>
+    </div>
+
+    <div class="footer">桌面软件使用与故障处理基本手册 · v1.0 · 本手册供内部参考，实际操作以本单位规范为准</div>
+
   </div>
-</footer>
+</main>
+
+<button id="toTop" aria-label="返回顶部">↑</button>
 
 <script>
-  // 生成星空
-  (function(){
-    var box=document.getElementById('stars'),html='';
-    for(var i=0;i<90;i++){
-      var x=Math.random()*100,y=Math.random()*100,
-          s=Math.random()*2+1,d=(Math.random()*3).toFixed(2);
-      html+='<i style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;animation-delay:'+d+'s"></i>';
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  var search = document.getElementById('search');
+  var sidebar = document.getElementById('sidebar');
+  var menuBtn = document.getElementById('menuBtn');
+  var toTop = document.getElementById('toTop');
+
+  // 目录搜索筛选
+  search.addEventListener('input', function(){
+    var q = search.value.trim().toLowerCase();
+    links.forEach(function(a){
+      a.classList.toggle('hide', q !== '' && a.textContent.toLowerCase().indexOf(q) === -1);
+    });
+  });
+
+  // 移动端菜单
+  menuBtn.addEventListener('click', function(){ sidebar.classList.toggle('open'); });
+  document.addEventListener('click', function(e){
+    if(window.innerWidth <= 900 && sidebar.classList.contains('open') &&
+       !sidebar.contains(e.target) && !menuBtn.contains(e.target)){
+      sidebar.classList.remove('open');
     }
-    box.innerHTML=html;
-  })();
+  });
 
-  // 新闻 Tab 切换
-  document.querySelectorAll('.tabs button').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('.tabs button').forEach(function(b){b.classList.remove('on');});
-      document.querySelectorAll('.newslist').forEach(function(l){l.style.display='none';});
-      btn.classList.add('on');
-      document.getElementById(btn.dataset.tab).style.display='block';
+  // 点击目录后自动高亮 + 移动端收起
+  links.forEach(function(a){
+    a.addEventListener('click', function(){
+      setActive(a);
+      if(window.innerWidth <= 900) sidebar.classList.remove('open');
     });
   });
 
-  // 导航高亮
-  document.querySelectorAll('.menu a').forEach(function(a){
-    a.addEventListener('click',function(){
-      document.querySelectorAll('.menu a').forEach(function(x){x.classList.remove('active');});
-      a.classList.add('active');
+  function setActive(a){
+    links.forEach(function(x){ x.classList.remove('active'); });
+    if(a){ a.classList.add('active'); }
+  }
+
+  // 滚动时高亮当前章节
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var pos = window.scrollY + 120;
+      var current = null;
+      sections.forEach(function(sec){
+        if(sec.offsetTop <= pos) current = sec.id;
+      });
+      if(current){
+        var a = links.filter(function(x){ return x.getAttribute('href') === '#' + current; })[0];
+        if(a) setActive(a);
+      }
+      toTop.classList.toggle('show', window.scrollY > 400);
+      ticking = false;
     });
-  });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // 返回顶部
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+})();
 </script>
 </body>
 </html>
